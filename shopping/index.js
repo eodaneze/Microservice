@@ -5,8 +5,8 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2000;
 
 app.listen(port, () => {
-    console.log(`customer service is running on http://localhost:${port}`)
+    console.log(`Shopping service is running on http://localhost:${port}`)
 })

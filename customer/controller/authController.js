@@ -10,7 +10,7 @@ const verification_secret = process.env.verification_secret_key;
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER,
+      customer: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
   });
@@ -41,7 +41,7 @@ const register = async(req, res) => {
             if(err){
                
               console.log(err)
-               res.status(400).json({ message: 'error registering user'});
+               res.status(400).json({ message: 'error registering customer'});
             }else{
                            
                res.status(200).json({ message: `User registered successfully. Verification email sent to ${email}`});
@@ -52,4 +52,27 @@ const register = async(req, res) => {
         console.log(err)
     }
 }
-module.exports = {register}
+
+
+const verifyEmail = async (req, res) => {
+    try {
+      const verificationToken = req.params.token;
+  
+      // Verify the token
+      const decodedToken = jwt.verify(verificationToken, verification_secret);
+      const { fullname, email } = decodedToken;
+  
+      // Update the customer's verification status
+      const customer = await Customer.findOneAndUpdate({ fullname, email, verificationToken }, { $set: { isVerified: true, verificationToken: null } });
+  
+      if (!customer) {
+        return res.status(400).json({ message: 'Invalid verification token' })
+      }
+  
+      res.status(200).json({ message: 'Email verified successfully, you can now login' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+module.exports = {register, verifyEmail}

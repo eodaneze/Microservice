@@ -1,5 +1,9 @@
 const express = require("express");
-const dotenv = require('dotenv');
+const dotenv = require('dotenv')
+const authRouter = require("./route/auth");
+require('colors');
+require('./config/db')
+
 
 dotenv.config();
 const app = express();
@@ -12,6 +16,8 @@ app.get("/", (req, res) => {
      res.send("Hello from customer service")
 })
 
+app.use("/api", authRouter)
+
 app.listen(port, () => {
-    console.log(`customer service is running on http://localhost:${port}`)
+    console.log(`customer service is running on http://localhost:${port}`.blue)
 })

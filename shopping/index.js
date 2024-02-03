@@ -7,6 +7,10 @@ app.use(express.json());
 
 const port = process.env.PORT || 2000;
 
+app.get("/", (req, res) => {
+     res.send("This is he shopping service")
+})
+
 app.listen(port, () => {
     console.log(`Shopping service is running on http://localhost:${port}`)
 })

@@ -17,14 +17,14 @@ const transporter = nodemailer.createTransport({
   });
 const register = async(req, res) => {
     try{
-         const {customername, fullname, email, password} = req.body;
+         const {username, fullname, email, password} = req.body;
          if (!isValidEmail(email)) return res.status(400).json({ message: 'Invalid email format' });
-         const exisitingcustomer = await Customer.findOne({$or: [{customername}, {email}]});
-         if(exisitingcustomer) return res.status(400).json({message: "customername or email already exists"});
+         const exisitingcustomer = await Customer.findOne({$or: [{username}, {email}]});
+         if(exisitingcustomer) return res.status(400).json({message: "username or email already exists"});
          const hashedPassword = await bcrypt.hash(password, 10);
          const verificationToken = jwt.sign({ fullname, email }, verification_secret);
          const newCustomer = new Customer({
-            customername,
+            username,
             fullname,
             email,
             password: hashedPassword,

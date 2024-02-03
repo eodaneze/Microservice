@@ -1,6 +1,15 @@
 const Customer = require("../models/Customer");
 
 
+const getAllCustomers = async(req, res) => {
+    try {
+        // using a mongodb $ne operator(not equal) to get all the users excluding the one with the isAdminrole
+        const allCustomer = await Customer.find({role: {$ne: 'isAdmin'}});
+        res.json(allCustomer);
+      } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve users' });
+      }
+}
 const updateCustomers = async(req, res) => {
     const {id} = req.params;
        
@@ -15,4 +24,4 @@ const updateCustomers = async(req, res) => {
     }
 }
 
-module.exports = {updateCustomers}
+module.exports = {updateCustomers, getAllCustomers}

@@ -102,7 +102,7 @@ const verifyEmail = async (req, res) => {
           });
         res.status(200).json({message: "Login successful", others, accessToken})
     }catch(err){
-       console.log(err)
+    //    console.log(err)
     }
 }
 module.exports = {register, verifyEmail, authLogin}
